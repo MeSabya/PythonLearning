@@ -1,0 +1,4 @@
+Follow this for more info : https://github.com/acroz/asyncio-example
+
+This is a dummy project where a dummy flask server is running , and agent will send heartbeat for some time and then dies.
+agent sends status as started or finished .

@@ -1,0 +1,4 @@
+python has a huge impact with explosion of machine learning and artificial intelligence.
+cpp is useful in system level programming ..
+go is useful in microservice developement .
+after invention of docker and K8s , go gained more popularity.
