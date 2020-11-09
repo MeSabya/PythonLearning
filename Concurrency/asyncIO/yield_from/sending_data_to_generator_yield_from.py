@@ -12,7 +12,8 @@ wrapper is transparently sent to the writer. solution is below:
 '''
 
 def writer_wrapper_soln(coro):
-    coro.send(None)      # commenting this will lead to TypeError: can't send non-None value to a just-started generator
+    coro.send(None)      # commenting this and line below will lead to TypeError: can't send non-None value to a just-started generator
+    #coro.__next__       # because coroutine started by __next__ or send(None) .
     while True:
         try:
             x = (yield)
