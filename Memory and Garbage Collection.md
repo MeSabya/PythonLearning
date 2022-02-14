@@ -1,5 +1,25 @@
 # Memory and Garbage Collection in Python
 
+Firstly, let’s define two Python lists. They can be exactly the same in terms of the content.
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+
+![image](https://user-images.githubusercontent.com/33947539/153866590-7f4bb9a5-d750-4d65-83d6-3c0194b6f6da.png)
+
+👉 ***Apparently, variables a and b are the same. However, does that mean these two variables are pointing to the same memory address? No. Let’s verify it.***
+
+![image](https://user-images.githubusercontent.com/33947539/153866699-a7690807-336f-4da6-86f3-b467b9cd5679.png)
+
+*The id() function will give us the “identity” of an object, which is indicated by an integer. As shown, the integers are different. So, variables a and b are pointing to different memory addresses although they are the same at the moment.*
+
+If we create another variable a1 and let a1 = a, there is no new object created. Instead, a1 will point to the same memory address as of a.
+
+![image](https://user-images.githubusercontent.com/33947539/153866796-119c21ed-77b9-4f4d-92a5-377cca73c589.png)
+
+That makes sense, that’s why when we change a, a1 will also be updated.
+
+
 Python follows two kinds of strategies:
       
       Garbage Collection
@@ -47,6 +67,32 @@ y = 101
 
 print("Since this object is already available on heap , this points to same object : " , id(y) == id(101) , " \n Reference count : " ,sys.getrefcount(101))
 ```
+
+#### What will increase the reference count?
+
+1. The object is created and assigned to a variable.
+2. The object is assigned to one more variable.
+3. The object is passed in a function as an argument.
+4. An object is appended into a container type.
+
+👉 **Tricky One**:
+
+```Lua
+a = [1, 2, 3]
+print(getrefcount(a))
+```
+
+👆 What should be the reference_count ?  Ans is : 2
+
+***why it is 2?***
+![image](https://user-images.githubusercontent.com/33947539/153867435-473985e0-35e8-4e95-b62d-6554890d008b.png)
+
+**Answer is:**
+
+In fact, when we use the getrefcount() function to query the reference count of an object, the function has to establish the reference to the object. That’s why the reference count is 2. It indicates that both the variable a and the function getrefcount() are referencing the list [1, 2, 3].
+
+
+
 
 ## Garbage Collection in Python
 
