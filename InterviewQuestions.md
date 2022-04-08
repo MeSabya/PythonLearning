@@ -1,16 +1,27 @@
-what is the difference between getattribute and getattr
-What is GIL?
-what are partial functions?
-What are abstract base class / ABC?
-What is the use of collections.counter?
-what is deque?
-what is defaultdict?
-Have you used namedtuple ?
-what is the use of contains magic method?
-Can you write a class which behaves as iterator?
-What is deep copy n shallow copy?
-When will you use dict of an object?
-What is the output of [‘one’, ‘two’, ‘three’][True] ?
+## what is the difference between getattribute and getattr
+
+## What is GIL?
+
+## what are partial functions?
+
+## What are abstract base class / ABC?
+
+## What is the use of collections.counter?
+
+## what is deque?
+
+## what is defaultdict?
+
+## Have you used namedtuple ?
+
+## what is the use of contains magic method?
+
+## Can you write a class which behaves as iterator?
+## What is deep copy n shallow copy?
+
+## When will you use dict of an object?
+
+## What is the output of [‘one’, ‘two’, ‘three’][True] ?
 set([1,2]) == set([2,1]) whats d output?
 whats the difference between iterator and iterable?
 x = [[]];x = x\*5;x[0].append(2) Whats d output ?
