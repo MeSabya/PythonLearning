@@ -127,10 +127,18 @@ print("Details of car:", ModelThree)
 👉 *Construction of complex objects need not have only one Builder, rather there can be several Builders depending upon the complexity of the builder itself.*
 
 
+## Consider using this when:
+
+1. Object contains a lot of attributes
+2. Builder pattern may be very useful while writing Unit Tests. When in order to construct the object under the test, need to pass a lot of parameters to the constructor and some of these parameters are completely irrelevant for the specific test. Builder class creation with separate methods for each parameter that should be tested, which returns by the end complete object under the test will help to write many UTs effectively, without duplicating the code.
+
+3. Building an XML document with HTML elements ```(<html>,<h1>,<h2>, <body>,<p> and etc)```
+4. Building a smartphone object with attributes like RAM, size, resolution, OS, waterproof and so on.
+
 
 ## Reference:
 https://github.com/rommel-sunga/design-patterns-for-humans-python#-builder
-
+https://medium.com/@analempert/10-design-patterns-with-day-to-day-examples-e4f256d8439
 
 
 
