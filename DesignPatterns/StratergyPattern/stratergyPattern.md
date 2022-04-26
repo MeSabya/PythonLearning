@@ -81,3 +81,18 @@ if __name__ == '__main__':
     print('Estimated time to reach destination: ', route_selection.time_estimation(60))
     
  ```   
+
+## Another Example:
+
+Let’s say you are tasked to monitor a mission-critical system that is highly available, resilient and fault-tolerant. To ensure that the production system meets its objectives, it is essential to send alerts to the developers, on-call Site Reliability Engineers and other stakeholders. The monitoring & alerting system would have different rules configured such as sending an email alert when error logs cross a threshold, a slack notification when a service goes down or SMS notification to on-call person.
+
+This can also be done using if/else statements.
+
+In future, multiple requirements might spring up. A few of the requirements that strike my mind are as follows:-
+
+1. Use an alternative messaging platform to slack
+2. Record all the alerts in a database or a file
+3. Send alerts to a different service in the cluster via an API call
+4. Modify the template used to send the email
+
+Solution to the above: strategy design pattern
