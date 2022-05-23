@@ -89,4 +89,15 @@ if __name__ == "__main__":
 
     doctest.testmod(optionflags=doctest.ELLIPSIS)
     
-```    
+```   
+## Pros and Cons of the Facade Design Pattern
+
+### Pros
+
+1. Facade Pattern easily isolates our code from the complexity of a subsystem.
+2. Helps to loose-couple the entities(i.e. sub-systems and client), upholding Dependency Inversion Principle.
+
+### Cons
+
+1. Changes to the sub-system may lead the changes to the Facade interface.
+2. Facade Interface object can become a supreme object coupled to all classes of an app.
