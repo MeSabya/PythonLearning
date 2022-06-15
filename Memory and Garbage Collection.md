@@ -68,6 +68,8 @@ y = 101
 print("Since this object is already available on heap , this points to same object : " , id(y) == id(101) , " \n Reference count : " ,sys.getrefcount(101))
 ```
 
+![image](https://user-images.githubusercontent.com/33947539/173764579-e2ef8b33-bbba-4207-bef8-58ab70d97043.png)
+
 #### What will increase the reference count?
 
 1. The object is created and assigned to a variable.
@@ -159,9 +161,15 @@ Reference count after function execution :  8
 #### Disadvantages of Reference counting
 But the issue with this technique is it has some overhead because , every object has to keep track of reference count for memory de-allocation and also memory de-allocation happens whenever an objects reference count becomes “0”.
 
-Reference counting will not be able to detect the cyclic references and those objects will not be eligible for garbage collection.
+Reference counting will not be able to detect the **cyclic references** and those objects will not be eligible for garbage collection.
 
 Because of above problems , python also uses another technique called Generational Garbage Collection.
+
+#### What is a cyclical reference or reference cycle?
+It is a situation in which an object refers to itself. The simplest cyclical reference is appending a list to itself.
+Reference counting alone can not destroy objects with cyclic references. If the reference count is not zero, the object cannot be deleted.
+
+The solution to this problem is the second garbage collection method.
 
 ### Generational Garbage Collection
 
@@ -179,7 +187,9 @@ Garbage collection is triggered automatically when a generation reaches its thre
 If there are 2 generations reached threshold , always garbage collection choses older generation and then younger generation.
 
 
+Python keeps track of every object in memory. 3 lists are created when a program is run. Generation 0, 1, and 2 lists.
 
+Newly created objects are put in the Generation 0 list. A list is created for objects to discard. Reference cycles are detected. If an object has no outside references it is discarded. The objects who survived after this process are put in the Generation 1 list. The same steps are applied to the Generation 1 list. Survivals from the Generation 1 list are put in the Generation 2 list. The objects in the Generation 2 list stay there until the end of the program execution.
 
 
 
