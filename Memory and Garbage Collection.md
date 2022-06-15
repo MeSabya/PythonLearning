@@ -179,17 +179,15 @@ Using this hypothesis, this GC monitors the young objects more frequently, since
 
 ![image](https://user-images.githubusercontent.com/33947539/153865547-c9371c20-1fba-4947-9658-71b8f3d01f8b.png)
 
-👉 In generational garbage collectors, such as the one used in Java, objects are split into groups according to their age into multiple regions called generations, as shown in the diagram above. There is a Young Generation, Old Generation and Permanent Generation.
+👉 Python keeps track of every object in memory. 3 lists are created when a program is run. Generation 0, 1, and 2 lists.
 
-When a new object is created , that object is categorized into “generation 0” or "Young Generation".
+Newly created objects are put in the Generation 0 list. A list is created for objects to discard. Reference cycles are detected. If an object has no outside references it is discarded. The objects who survived after this process are put in the Generation 1 list. The same steps are applied to the Generation 1 list. Survivals from the Generation 1 list are put in the Generation 2 list. The objects in the Generation 2 list stay there until the end of the program execution.
+
 
 Garbage collection is triggered automatically when a generation reaches its threshold and whatever objects remain in that generation after garbage collection are promoted to older generation.
 If there are 2 generations reached threshold , always garbage collection choses older generation and then younger generation.
 
 
-Python keeps track of every object in memory. 3 lists are created when a program is run. Generation 0, 1, and 2 lists.
-
-Newly created objects are put in the Generation 0 list. A list is created for objects to discard. Reference cycles are detected. If an object has no outside references it is discarded. The objects who survived after this process are put in the Generation 1 list. The same steps are applied to the Generation 1 list. Survivals from the Generation 1 list are put in the Generation 2 list. The objects in the Generation 2 list stay there until the end of the program execution.
 
 
 
