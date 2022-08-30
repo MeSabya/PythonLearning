@@ -50,3 +50,7 @@ test_div_by_3_6.py:12: AssertionError
 ========================== 1 failed, 1 passed, 6 deselected in 0.07 seconds
 ==========================
 ```
+However, the approach comes with its own limitation. A fixture function defined inside a test file has a scope within the test file only. We cannot use that fixture in another test file. To make a fixture available to multiple test files, we have to define the fixture function in a file called **conftest.py**. conftest.py is explained in the next chapter.
+
+https://www.tutorialspoint.com/pytest/pytest_fixtures.htm
+
