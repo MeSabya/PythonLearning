@@ -28,3 +28,13 @@ Load Balancer functional requirements:
 - Then we should add functionality to add configuration files to add hardcoded host names and ip addresses.
 - Load balancer should able to check health check of servers.
 - Load balancer should able add firewall functionality.
+- It should able to Manipulate the HTTP Request. 
+
+#### Why Manipulate the HTTP Request?
+HTTP requests are made up of different parts like headers, cookies, parameters, and data, to name a few. You may want to do different things based on the values of those parts.
+
+**Examples:**
+
+👉 You may want to configure your load balancer to send the client to a mobile-friendly version of your website. To do so, you can inspect the User-Agent header, determine if it's from an Android or iPhone browser, and then send it to the appropriate set of servers whilst adding additional headers.
+
+👉 Another possible use case is to serve up localized versions of a site based on the Accept-Language header.
