@@ -22,15 +22,21 @@ Python 3.9.0
 (env)$ pip install flask pytest
 
 ```
-Load Balancer functional requirements:
+Load Balancer functional and Non functional requirements:
 ======================================
-- Since we are testing a load balancer functionality , we are going to spawn the application instances using docker compose yaml file.
-- Then we should add functionality to add configuration files to add hardcoded host names and ip addresses.
-- Load balancer should able to check health check of servers.
-- Load balancer should able add firewall functionality.
-- It should able to Manipulate the HTTP Request. 
+#### Since we are testing a load balancer functionality , we are going to spawn the application instances using docker compose yaml file.
+#### Then we should add functionality to add configuration files to add hardcoded host names and ip addresses.
+#### Load balancer should able to check health check of servers.
+#### Load balancer should able add firewall functionality.
 
-#### Why Manipulate the HTTP Request?
+##### Why Implement a Firewall in a Load Balancer?
+**Since load balancers are meant for distributing traffic, why would we want to add a firewall to them**?
+
+Often, when an attack vector such as a DDOS attack takes place, it's not feasible to block all traffic for long periods of time since we still want to allow traffic from clients not part of the attack. Since our load balancer has insights into the various parts of an HTTP request, like the headers and requested URL, we can monitor exactly which clients are targeting and apply blocking rules appropriately based on behavior. So, by adding firewall capabilities to our load balancer, we can block traffic in an intelligent way that's not otherwise available since Edge routers do not usually have access to HTTP requests.
+
+## It should able to Manipulate the HTTP Request. 
+
+###### Why Manipulate the HTTP Request?
 HTTP requests are made up of different parts like headers, cookies, parameters, and data, to name a few. You may want to do different things based on the values of those parts.
 
 **Examples:**
@@ -38,3 +44,4 @@ HTTP requests are made up of different parts like headers, cookies, parameters, 
 👉 You may want to configure your load balancer to send the client to a mobile-friendly version of your website. To do so, you can inspect the User-Agent header, determine if it's from an Android or iPhone browser, and then send it to the appropriate set of servers whilst adding additional headers.
 
 👉 Another possible use case is to serve up localized versions of a site based on the Accept-Language header.
+
