@@ -22,17 +22,23 @@ Python 3.9.0
 (env)$ pip install flask pytest
 
 ```
-Load Balancer functional and Non functional requirements:
-======================================
+## Load Balancer which functionalities will be covered and how  
+
 #### Since we are testing a load balancer functionality , we are going to spawn the application instances using docker compose yaml file.
 #### Then we should add functionality to add configuration files to add hardcoded host names and ip addresses.
 #### Load balancer should able to check health check of servers.
 #### Load balancer should able add firewall functionality.
 
 ##### Why Implement a Firewall in a Load Balancer?
-**Since load balancers are meant for distributing traffic, why would we want to add a firewall to them**?
+👉 **Since load balancers are meant for distributing traffic, why would we want to add a firewall to them**?
 
 Often, when an attack vector such as a DDOS attack takes place, it's not feasible to block all traffic for long periods of time since we still want to allow traffic from clients not part of the attack. Since our load balancer has insights into the various parts of an HTTP request, like the headers and requested URL, we can monitor exactly which clients are targeting and apply blocking rules appropriately based on behavior. So, by adding firewall capabilities to our load balancer, we can block traffic in an intelligent way that's not otherwise available since Edge routers do not usually have access to HTTP requests.
+
+Firewall Functionality implemented using:
+
+- Blocking IP Addresses https://github.com/paktek123/testdriven-loadbalancer-tdd-tutorial/blob/main/loadbalancer.yaml#L16
+- Path Blocking https://github.com/paktek123/testdriven-loadbalancer-tdd-tutorial/blob/main/loadbalancer.yaml#L28
+
 
 ## It should able to Manipulate the HTTP Request. 
 
