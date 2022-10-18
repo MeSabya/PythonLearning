@@ -24,9 +24,9 @@ Python 3.9.0
 ```
 ### Load Balancer which functionalities will be covered and how  
 
-1. #### should support host and path-based routing
-2. #### Load balancer should able to check health check of servers. (Health check Functionality)
-3. #### Load balancer should able add firewall functionality.
+1. #### Our LB should support host and path-based routing
+2. #### Our LB should able to check health check of servers. (Health check Functionality)
+3. #### Our LB should able add firewall functionality.
 
    ##### Why Implement a Firewall in a Load Balancer?
   👉 Since load balancers are meant for distributing traffic, why would we want to add a firewall to them ?
@@ -72,4 +72,6 @@ Python 3.9.0
   rewrite the URL to https://www.website.com/v2 for 50% of our traffic.
 
   https://github.com/paktek123/testdriven-loadbalancer-tdd-tutorial/blob/main/loadbalancer.yaml#L13
+
+5. #### Our LB should support load balancing algorithms (Round Robin, Weighted Round Robin, IP hashing or sticky session, least connection, Global Server Load Balancing).
 
