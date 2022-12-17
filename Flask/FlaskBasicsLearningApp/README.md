@@ -3,3 +3,5 @@ https://towardsdatascience.com/how-to-set-up-a-production-grade-flask-applicatio
 
 #### Best to learn pytest
 https://diegoquintanav.github.io/flask-contexts.html
+
+https://testdriven.io/blog/flask-contexts/
