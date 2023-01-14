@@ -73,3 +73,42 @@ class LineItem(object):
 
 and we can extend the Quantity class to do more common validating
 
+## Builtin Descriptor Object Examples:
+- classmethod
+- staticmethod
+- property
+- functions in general
+
+#### We can see that classmethod and staticmethod are Non-Data-Descriptors:
+
+>>> is_descriptor(classmethod), is_data_descriptor(classmethod)
+(True, False)
+>>> is_descriptor(staticmethod), is_data_descriptor(staticmethod)
+(True, False)
+Both only have the __get__ method:
+
+#### Note that all functions are also Non-Data-Descriptors:
+
+>>> def foo(): pass
+... 
+>>> is_descriptor(foo), is_data_descriptor(foo)
+(True, False)
+
+#### Data Descriptor, property
+However, property is a Data-Descriptor:
+
+>>> is_data_descriptor(property)
+True
+>>> has_descriptor_attrs(property)
+set(['__set__', '__get__', '__delete__'])
+
+## Dotted Lookup Order
+These are important distinctions, as they affect the lookup order for a dotted lookup.
+
+obj_instance.attribute
+
+- First the above looks to see if the attribute is a Data-Descriptor on the class of the instance,
+- If not, it looks to see if the attribute is in the obj_instance's __dict__, then
+- it finally falls back to a Non-Data-Descriptor.
+
+
