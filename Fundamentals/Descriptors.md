@@ -1,3 +1,5 @@
+## Defining Descriptor
+
 👉 **A descriptor is an object with any of the following methods (__get__, __set__, or __delete__), intended to be used via dotted-lookup as
 if it were a typical attribute of an instance. For an owner-object, obj_instance, with a descriptor object:**
 
@@ -13,6 +15,7 @@ del obj_instance.descriptor invokes
 descriptor.__delete__(self, obj_instance) returning None
 This is how the deleter on a property works.
 
+## Types of descriptor
 - A Data Descriptor has a __set__ and/or __delete__.
 - A Non-Data-Descriptor has neither __set__ nor __delete__.
 
