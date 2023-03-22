@@ -1,3 +1,11 @@
+## 
+
+## How to list all functions in a Python module?
+
+##### 1. Using dir() to get functions in a module.
+##### 2. Using __all__ to get functions in a module
+##### 3. Using inspect to get functions in a module
+
 ## What does built-in class attribute __dict__ do in Python?
 This is the dictionary containing the module’s symbol table.
 
@@ -28,7 +36,7 @@ print bar.__dict__
 
 https://www.geeksforgeeks.org/reflection-in-python/
 Reflection refers to the ability for code to be able to examine attributes about objects that might be passed as parameters to a function.
-Reflection-enabling functions include type(), isinstance(), callable(), dir() and getattr().
+Reflection-enabling functions include  **type(), isinstance(), callable(), dir() and getattr().**
 
 
 ### How do I check if an object is an instance of a given class or of a subclass of it?
