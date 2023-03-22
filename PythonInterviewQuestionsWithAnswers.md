@@ -1,3 +1,28 @@
+## What does built-in class attribute __dict__ do in Python?
+This is the dictionary containing the module’s symbol table.
+
+```python
+object.__dict__
+```
+
+```python
+The following code shows how __dict__ works
+
+class MyClass(object):
+    class_var = 1
+
+    def __init__(self, i_var):
+        self.i_var = i_var
+
+foo = MyClass(2)
+bar = MyClass(3)
+
+print MyClass.__dict__
+print foo.__dict__
+print bar.__dict__
+```
+
+
 
 ## Reflection in Python?
 
