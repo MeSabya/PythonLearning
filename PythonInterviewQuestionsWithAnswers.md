@@ -1,4 +1,38 @@
 
+## Reflection in Python?
+
+https://www.geeksforgeeks.org/reflection-in-python/
+Reflection refers to the ability for code to be able to examine attributes about objects that might be passed as parameters to a function.
+Reflection-enabling functions include type(), isinstance(), callable(), dir() and getattr().
+
+
+### How do I check if an object is an instance of a given class or of a subclass of it?
+
+## Difference between type() and isinstance()?
+One major difference is isinstance() supports inheritance while type does not support it.
+
+Example:
+
+```python 
+# python code to show isinstance() support
+# inheritance
+class MyDict(dict):
+	"""A normal dict, that is always created with an "initial" key"""
+
+	def __init__(self):
+		self["initial"] = "some data"
+
+
+d = MyDict()
+print(isinstance(d, MyDict))
+print(isinstance(d, dict))
+
+d = dict()
+print(isinstance(d, MyDict))
+print(isinstance(d, dict))
+```
+
+
 
 ## why we need class method in python?
 Class methods are typically useful when we need to access the class itself — for example, when we want to create a factory method, that is a method that creates instances of the class. In other words, classmethods can serve as alternative constructors.
