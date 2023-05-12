@@ -1,3 +1,35 @@
+## How to use a custom object as a key in a dictionary in Python
+
+DEFINE  ```__hash__() AND __eq__() ``` METHODS FOR A CUSTOM CLASS TO USE A CUSTOM OBJECT AS A KEY IN A DICTIONARY
+Define ```__hash__(self) and __eq__(self, other)``` for a custom class. 
+Two objects for which ```__hash__(self)``` returns the same value and ```__eq__(self, other)``` evaluates to True will be recognized as the same key. 
+Note that ```__eq__(self, other)``` will not be evaluated if ```__hash__(self)``` does not match any keys in the dictionary.
+
+In most cases, the hash function should return the same integer for obj1 and obj2 if and only if the two objects have all the same attribute values, while __eq__(self, other) should return True if and only if self and other have exactly the same attribute values.
+
+```python
+class C:
+    def __init__(self, a1, a2):
+        self.a1 = a1
+        self.a2 = a2
+
+    def __hash__(self):
+        return hash((self.a1, self.a2))
+get a tuple's hash
+
+
+    def __eq__(self, other):
+        return (self.a1, self.a2) == (other.a1, other.a2)
+
+object_a = C("a", 1)
+object_b = C("a", 1)
+object_c = C("b", 2)
+
+a_dictionary = {object_a : 3, object_b : 4, object_c : 5}
+
+print(a_dictionary[object_a])
+```
+
 ## Weak references 
 
 The reference count usually works as such: each time you create a reference to an object, it is increased by one, and whenever you delete a reference, it is decreased by one.
