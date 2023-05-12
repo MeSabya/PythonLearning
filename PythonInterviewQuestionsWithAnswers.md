@@ -1,3 +1,11 @@
+## What is the var() function in Python?
+
+The var() function is part of the standard library in Python and is used to get an object’s _dict_ attribute. 
+The returned _dict_ attribute contains the changeable attributes of the object. 
+This means that when we update the attribute list of an object, the var() function will return the updated dictionary.
+
+The var() function returns a changeable _dict_ attribute of the passed object. This object can be a module, class instance, class, etc. When no parameter is passed, var() returns the local symbol table of the object passed as a dictionary.
+
 ## How to use a custom object as a key in a dictionary in Python
 
 DEFINE  ```__hash__() AND __eq__() ``` METHODS FOR A CUSTOM CLASS TO USE A CUSTOM OBJECT AS A KEY IN A DICTIONARY
