@@ -4,10 +4,12 @@ In this exercise, we want to time our functions. What we want is that whenever a
 Let’s get into detail. Consider the scenario below while attempting the challenge. 
 We have an Animal class. It has a function talk as follows:
 
+```python
 class Animal():
     def talk(self):
         time.sleep(1)
         print("Animal talk")
+```
 
 👉 And, we have a decorator time_taken that calculates the required time taken by any function.
    Now, if we want to calculate the time for talk, we can simply add @time_taken before its header, and the problem is solved!
