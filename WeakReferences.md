@@ -56,6 +56,28 @@ b.display(b.a)
 
 Notice, each of the two objects is storing the reference of the other as a property, thus forming a circular reference.
 
+### Example3 
+
+```python 
+Circular References
+In [8]: l1 = [1,] ; l2 = [2,]
+
+In [9]: l1.append(l2); l2.append(l1)
+
+In [10]: l1
+Out[10]: [1, [2, [...]]]
+
+In [11]: l2
+Out[11]: [2, [1, [...]]]
+
+In [12]: l1[1]
+Out[12]: [2, [1, [...]]]
+
+In [13]: l2[1][1][1]
+Out[13]: [1, [2, [...]]]
+```
+
+
 ### What Problem arises due to Circular Reference?
 
 The problem occurs when the classes of any objects involved in the circular reference have a custom ```__del__``` function.
