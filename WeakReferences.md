@@ -143,3 +143,94 @@ del a
 del b
 ```
 
+## How weakref can be used to delete the useless objects?
+To illustrate the difference between memory handling with a regular dictionary and WeakValueDictionary, let’s go experiment with explicitly calling the garbage collector again:
+
+```python
+import gc
+from pprint import pprint
+import weakref
+
+gc.set_debug(gc.DEBUG_LEAK)
+
+class ExpensiveObject(object):
+    def __init__(self, name):
+        self.name = name
+    def __repr__(self):
+        return 'ExpensiveObject(%s)' % self.name
+    def __del__(self):
+        print '(Deleting %s)' % self
+        
+def demo(cache_factory):
+    # hold objects so any weak references 
+    # are not removed immediately
+    all_refs = {}
+    # the cache using the factory we're given
+    print 'CACHE TYPE:', cache_factory
+    cache = cache_factory()
+    for name in [ 'one', 'two', 'three' ]:
+        o = ExpensiveObject(name)
+        cache[name] = o
+        all_refs[name] = o
+        del o # decref
+
+    print 'all_refs =',
+    pprint(all_refs)
+    print 'Before, cache contains:', cache.keys()
+    for name, value in cache.items():
+        print '  %s = %s' % (name, value)
+        del value # decref
+        
+    # Remove all references to our objects except the cache
+    print 'Cleanup:'
+    del all_refs
+    gc.collect()
+
+    print 'After, cache contains:', cache.keys()
+    for name, value in cache.items():
+        print '  %s = %s' % (name, value)
+    print 'demo returning'
+    return
+
+demo(dict)
+print
+demo(weakref.WeakValueDictionary)
+```
+
+👉 Output
+```shell
+$ python weakref_valuedict.py
+
+CACHE TYPE: <type 'dict'>
+all_refs ={'one': ExpensiveObject(one),
+ 'three': ExpensiveObject(three),
+ 'two': ExpensiveObject(two)}
+Before, cache contains: ['three', 'two', 'one']
+  three = ExpensiveObject(three)
+  two = ExpensiveObject(two)
+  one = ExpensiveObject(one)
+Cleanup:
+After, cache contains: ['three', 'two', 'one']
+  three = ExpensiveObject(three)
+  two = ExpensiveObject(two)
+  one = ExpensiveObject(one)
+demo returning
+(Deleting ExpensiveObject(three))
+(Deleting ExpensiveObject(two))
+(Deleting ExpensiveObject(one))
+
+CACHE TYPE: weakref.WeakValueDictionary
+all_refs ={'one': ExpensiveObject(one),
+ 'three': ExpensiveObject(three),
+ 'two': ExpensiveObject(two)}
+Before, cache contains: ['three', 'two', 'one']
+  three = ExpensiveObject(three)
+  two = ExpensiveObject(two)
+  one = ExpensiveObject(one)
+Cleanup:
+(Deleting ExpensiveObject(three))
+(Deleting ExpensiveObject(two))
+(Deleting ExpensiveObject(one))
+After, cache contains: []
+demo returning
+```
