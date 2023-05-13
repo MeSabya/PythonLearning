@@ -62,7 +62,7 @@ The problem occurs when the classes of any objects involved in the circular refe
 
 Consider the following Python code for instance:
 
-````
+```python
 class A:
     def __init__(self):
         print("Object A Created")
