@@ -272,3 +272,67 @@ Objects like lists are mutable. This means that the contents of the object can b
 ## When is "i += x" different from "i = i + x" in Python?
 
 https://stackoverflow.com/a/15376520/17238613
+
+## Output1
+
+```python
+class A:
+    def show(self):
+        print("A")
+
+class B(A):
+    def show(self):
+        print("B")
+
+class C(A):
+    def show(self):
+        print("C")
+
+class D(B, C):
+    pass
+
+obj = D()
+obj.show()  # What will be printed?
+```
+### Explanation:
+
+D inherits from both B and C. When a method is called on an object of class D and that method is not defined in D, Python looks for the method in the base classes in a specific order known as the Method Resolution Order (MRO).
+
+The MRO is determined by the order of base classes specified in the class definition. In this case, the MRO for class D is [D, B, C, A].
+
+The show method is called on obj, which is an instance of class D. Python looks for the show method in class D, then in class B, then in class C, and finally in class A.
+
+**The show method is found in class B. Therefore, the show method from class B is executed, and the output will be: B**
+
+## Output2
+
+```python
+values = [1, 2, 3, 4, 5]
+squares_lc = [x**2 for x in values]
+squares_ge = (x**2 for x in values)
+
+print(squares_lc)  # What will be printed?
+print(squares_ge)  # And here?
+```
+### Explanation
+Output: 
+[1, 4, 9, 16, 25]
+<generator object <genexpr> at ...
+
+## Output3
+```python
+User
+x = 10
+def func():
+    x += 1
+    print(x)
+
+func()
+```
+
+
+
+
+
+
+
