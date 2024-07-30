@@ -1,3 +1,13 @@
+Descriptors are used when an object is assigned to a class attribute and then accessed through an instance.
+
+Descriptor Methods
+
+```shell
+__get__(self, instance, owner): Part of the descriptor protocol, used to customize the behavior of getting an attribute.
+__set__(self, instance, value): Part of the descriptor protocol, used to customize the behavior of setting an attribute.
+__delete__(self, instance): Part of the descriptor protocol, used to customize the behavior of deleting an attribute.
+```
+
 ```python
 class Foo:
     def __init__(self):
@@ -23,9 +33,9 @@ print(f.bar)
 ```shell
 __get__: Used with descriptors to control access to a specific attribute.
 
- __getattr__: A fallback method that is only called when an attribute is not found through normal means.
+__getattr__(self, name): Called when an attribute is not found in an object’s __dict__. This acts as a fallback method.
 
-__getattribute__: Intercepts every attribute access and allows for extensive customization but requires care to avoid infinite recursion.
+__getattribute__(self, name): Called every time an attribute is accessed on an instance, regardless of whether it exists or not. This allows for extensive customization of attribute access.
 ```
 
 ## Can you explain why __get__ called is not printed in the above example?
@@ -57,4 +67,7 @@ class Container:
 c = Container()
 print(c.foo)  # This will call Foo's __get__ method
 ```
+
+## 
+
 
