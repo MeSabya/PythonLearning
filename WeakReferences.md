@@ -6,9 +6,15 @@ This is not always desirable,
 
 The weakref module supports weak references to objects. 
 
+
+👉 Weak references allow you to reference an object without increasing its reference count. 
+This means that if all strong references to the object are deleted, the object can be collected by Python's garbage collector,
+even if weak references still exist.
+
 ## What is Circular Reference in Python? Problem it causes and how to handle it.
 When two objects in Python holds reference of each other, it is termed as cyclic or circular reference.
 This occurs when object A’s property refers to object B, and object B’s property refers back to object A.
+
 
 ### Example 1: Circular Reference between Objects of the different class
 
@@ -137,6 +143,8 @@ Manually deleting each reference is not a good option because we as programmers 
 
 ```python
 import weakref
+import sys
+import gc
 
 class A:
     def __init__(self):
@@ -156,13 +164,77 @@ class B:
 a = A()
 b = B()
 
+print("Reference count for a:", sys.getrefcount(a))
+print("Reference count for b:", sys.getrefcount(b))
+
+# Setting up strong circular references
+a.b = b
+b.a = a
+
+print("Reference count for a after circular reference:", sys.getrefcount(a))
+print("Reference count for b after circular reference:", sys.getrefcount(b))
+
 #setting up weak circular reference
-a.b = weakref.ref(b)
-b.a = weakref.ref(a)
+#a.b = weakref.ref(b)
+#b.a = weakref.ref(a)
+
 
 #deleting objects
 del a
 del b
+
+#gc.collect()
+
+# Check if the objects have been collected
+print("Objects collected, if any:")
+for obj in gc.get_objects():
+    if isinstance(obj, A) or isinstance(obj, B):
+        print(f"Uncollected object: {obj}")
+
+print("End of script")
+```
+Output of the code is:
+
+```shell
+Object A Created
+Object B Created
+Reference count for a: 2
+Reference count for b: 2
+Reference count for a after circular reference: 3
+Reference count for b after circular reference: 3
+Objects collected, if any:
+Uncollected object: <__main__.A object at 0x75c4f71b3fd0>
+Uncollected object: <__main__.B object at 0x75c4f71b3fa0>
+End of script
+Object A Destroyed
+Object B Destroyed
+```
+
+### Now with weak reference
+
+Comment this section of code in the above code:  
+
+Setting up strong circular references
+a.b = b
+b.a = a
+
+and uncommenting this section of code:
+
+#setting up weak circular reference
+#a.b = weakref.ref(b)
+#b.a = weakref.ref(a)
+
+```shell
+Object A Created
+Object B Created
+Reference count for a: 2
+Reference count for b: 2
+Reference count for a after circular reference: 2
+Reference count for b after circular reference: 2
+Object A Destroyed
+Object B Destroyed
+Objects collected, if any:
+End of script
 ```
 
 ## How weakref can be used to delete the useless objects?
@@ -256,3 +328,68 @@ Cleanup:
 After, cache contains: []
 demo returning
 ```
+## In reallife usecase why in the observer pattern it is necessary to use weak reference ..at the end we need an observer to notify to?
+
+### Why Use Weak References in the Observer Pattern?
+
+#### Automatic Resource Management:
+
+If the subject holds strong references to its observers, those observers will remain alive as long as the subject exists, even if they are no longer needed elsewhere in the application.
+This can lead to memory leaks, especially if observers are no longer in active use but are not explicitly removed from the subject's observer list.
+
+```python
+import weakref
+
+class DataModel:
+    def __init__(self):
+        self._observers = []
+
+    def add_observer(self, observer):
+        self._observers.append(weakref.ref(observer))
+
+    def notify_observers(self):
+        for ref in self._observers:
+            observer = ref()
+            if observer is not None:
+                observer.update()
+            else:
+                # Optionally remove the observer if it's been collected
+                self._observers.remove(ref)
+
+class Window:
+    def update(self):
+        print("Window updated with new data.")
+
+# Example usage
+model = DataModel()
+
+window1 = Window()
+model.add_observer(window1)
+
+window2 = Window()
+model.add_observer(window2)
+
+model.notify_observers()  # Both windows get notified
+
+# Simulate closing window1
+del window1
+
+model.notify_observers()  # Only window2 gets notified; window1 is no longer alive
+```
+
+### Why Not Always Use Strong References?
+If the subject kept strong references to window1 and window2:
+
+**Even after window1 is "closed" (i.e., the window1 variable is deleted), the window object would remain in memory because the subject still holds a strong reference.This would cause a memory leak, as the window object (and any resources it holds) cannot be garbage collected.**
+
+👉 By using weak references:
+
+When window1 is deleted (or goes out of scope), the weak reference in the subject no longer prevents window1 from being garbage collected.
+The next time the subject tries to notify its observers, it can skip over any observers that have been collected.
+
+#### Handling None References
+
+In scenarios where weak references are used:
+
+The subject should check if the weak reference returns None before attempting to call the observer's update method.
+If it returns None, this indicates that the observer has been garbage collected, and the subject can either ignore it or clean up its observer list by removing the None references.
