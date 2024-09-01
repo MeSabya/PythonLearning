@@ -125,36 +125,70 @@ Reflection-enabling functions include  **type(), isinstance(), callable(), dir()
 ### How do I check if an object is an instance of a given class or of a subclass of it?
 
 ## Difference between type() and isinstance()?
-One major difference is isinstance() supports inheritance while type does not support it.
+The difference between type() and isinstance() in Python lies in their usage and behavior when checking the type of an object.
+
+### type()
+- Purpose: Returns the exact type of an object.
+- Usage: type(object) returns the type of object.
+
+Example:
+```python
+a = 10
+print(type(a))  # Output: <class 'int'>
+```
+
+Limitations: type() is strict and does not consider inheritance. It checks if the object's type is exactly the type provided.
+
+### isinstance()
+Purpose: Checks if an object is an instance of a class or a subclass thereof.
+
+Usage: isinstance(object, classinfo) returns True if object is an instance of classinfo or any subclass thereof, and False otherwise.
 
 Example:
 
-```python 
-# python code to show isinstance() support
-# inheritance
-class MyDict(dict):
-	"""A normal dict, that is always created with an "initial" key"""
+```python
+class Animal:
+    pass
 
-	def __init__(self):
-		self["initial"] = "some data"
+class Dog(Animal):
+    pass
 
+d = Dog()
 
-d = MyDict()
-print(isinstance(d, MyDict))
-print(isinstance(d, dict))
-
-d = dict()
-print(isinstance(d, MyDict))
-print(isinstance(d, dict))
+print(isinstance(d, Dog))     # Output: True
+print(isinstance(d, Animal))  # Output: True
 ```
+Advantages: isinstance() is more flexible than type() because it supports inheritance. It is generally preferred when checking an object's type in a polymorphic setting.
 
+Key Differences
+Strictness: type() is strict and does not recognize subclasses, whereas isinstance() checks for both the exact class and subclasses.
 
+### Common Use Cases:
+- Use type() when you need to know the exact type of an object.
+- Use isinstance() when you want to check if an object is of a specific type or a derived type (inherited class).
+
+### Example Comparing Both
+```python
+class Animal:
+    pass
+
+class Dog(Animal):
+    pass
+
+d = Dog()
+
+print(type(d) == Dog)       # Output: True
+print(type(d) == Animal)    # Output: False
+
+print(isinstance(d, Dog))   # Output: True
+print(isinstance(d, Animal)) # Output: True
+```
+In this example, type(d) == Animal is False because d is of type Dog, not Animal. However, isinstance(d, Animal) is True because Dog is a subclass of Animal.
 
 ## why we need class method in python?
 Class methods are typically useful when we need to access the class itself — for example, when we want to create a factory method, that is a method that creates instances of the class. In other words, classmethods can serve as alternative constructors.
 
 ```python
-
 class Employee:
     NO_OF_EMPLOYEES = 0
   
