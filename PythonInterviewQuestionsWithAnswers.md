@@ -1,3 +1,187 @@
+## Find the output
+<details>
+
+```python
+def f(x, lst=[]):
+    lst.append(x)
+    return lst
+
+print(f(1))
+print(f(2))
+print(f(3, []))
+print(f(4))
+```
+
+- A) [1] [2] [3] [4]
+- B) [1] [1, 2] [3] [1, 2, 4]
+- C) [1] [1, 2] [3] [1, 2, 4]
+- D) [1] [2] [3] [4]
+
+### ✅ Answer: B
+Explanation: Mutable default arguments persist across calls.
+</details>
+
+## Find the Output
+<details>
+
+```python
+class A:
+    def __init__(self, val):
+        self.val = val
+
+    def __eq__(self, other):
+        return self.val == other.val
+a = A(10)
+b = A(10)
+print(a == b, a is b)
+```
+
+A) True True
+B) True False
+C) False False
+D) Error
+
+#### ✅ Answer: B
+Explanation: == calls __eq__, but a is b compares object identity.
+</details>
+
+## functools.lru_cache Tricky questions
+<details>
+    
+### What will this print?
+```python
+import functools
+
+@functools.lru_cache(maxsize=2)
+def square(n):
+    print(f"Computing square({n})")
+    return n * n
+
+print(square(2))
+print(square(3))
+print(square(2))
+print(square(4))
+print(square(3))
+```
+#### Output
+```shell
+Computing square(2)  
+4  
+Computing square(3)  
+9  
+4  
+Computing square(4)  
+16  
+Computing square(3)  
+9  
+```
+#### Explanation
+- maxsize=2 means only the last two results are cached.
+- When square(4) is computed, square(2) gets evicted.
+- Calling square(3) again retrieves it from cache, while square(2) would have needed recomputation.
+
+### What will happen if you run this?
+```python
+import functools
+
+@functools.lru_cache(maxsize=3)
+def add(a, b):
+    return a + b
+
+print(add(2, 3))
+print(add(2.0, 3.0))
+```
+#### Output
+5 and 5
+
+By default, lru_cache() does not distinguish types.
+
+add(2,3) and add(2.0,3.0) are treated as the same cache entry.
+
+### What happens if we modify a mutable argument?
+```python
+import functools
+
+@functools.lru_cache(maxsize=3)
+def process(data):
+    data.append(10)
+    return sum(data)
+
+print(process([1, 2, 3]))
+print(process([1, 2, 3]))
+```
+#### Explanation
+- Lists are mutable, and lru_cache() only works with hashable arguments.
+- This raises a TypeError because lists are unhashable.
+
+### How can we fix the previous issue?
+```python
+import functools
+
+@functools.lru_cache(maxsize=3)
+def process(data):
+    return sum(data) + 10
+
+print(process(tuple([1, 2, 3])))
+print(process(tuple([1, 2, 3])))
+```
+- 16 (cached) and 16
+- Tuples are immutable, so they can be cached.
+
+### What will this print?
+```python
+import functools
+
+@functools.lru_cache(maxsize=3, typed=True)
+def add(a, b):
+    return a + b
+
+print(add(2, 3))
+print(add(2.0, 3.0))
+```
+The typed=True flag ensures that int and float versions are treated separately.
+
+add(2,3) and add(2.0,3.0) are stored as separate cache entries.
+
+### What happens here?
+```python
+import functools
+
+@functools.lru_cache(maxsize=3)
+def counter():
+    counter.count += 1
+    return counter.count
+
+counter.count = 0
+print(counter())
+print(counter())
+```
+#### Explanation
+1 and 1
+
+lru_cache() only allows caching functions with arguments.
+
+Since counter() has no arguments, it always returns the cached result (1).
+
+### What happens if maxsize=0?
+
+```python
+import functools
+
+@functools.lru_cache(maxsize=0)
+def power(n):
+    return n ** 2
+
+print(power(3))
+print(power(3))
+```
+A) 9 and 9
+Explanation:
+
+maxsize=0 disables caching, meaning power(3) is always recomputed.
+</details>
+
+
 ## What is the var() function in Python?
 
 The var() function is part of the standard library in Python and is used to get an object’s _dict_ attribute. 
