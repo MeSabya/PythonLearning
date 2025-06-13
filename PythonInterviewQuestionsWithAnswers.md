@@ -1,3 +1,58 @@
+## asyncio.get_event_loop() vs asyncio.run() 
+![image](https://github.com/user-attachments/assets/ea36dac1-ee4a-4093-b162-2a79b44f51a1)
+
+![image](https://github.com/user-attachments/assets/ad74f280-daf4-4b7c-9f39-44e275088f6f)
+
+- asyncio.run() wraps everything in one coroutine.
+- If you need to spawn and manage tasks dynamically (e.g., multiple background workers, timeouts, retries), using the loop directly gives you more control.
+
+### Spawning Multiple Background Workers Dynamically
+You want to:
+
+- Accept tasks from somewhere (e.g., a queue)
+- Dynamically spawn workers that process those tasks concurrently
+- Cancel workers on shutdown
+
+```python
+import asyncio
+import random
+
+task_queue = asyncio.Queue()
+
+async def worker(name):
+    while True:
+        task = await task_queue.get()
+        if task is None:
+            print(f"❌ Worker {name} shutting down.")
+            break
+        print(f"🔧 Worker {name} processing task: {task}")
+        await asyncio.sleep(random.uniform(1, 2))
+        print(f"✅ Worker {name} completed task: {task}")
+
+async def producer():
+    for i in range(10):
+        await task_queue.put(f"Task-{i}")
+        await asyncio.sleep(0.2)
+
+async def main():
+    loop = asyncio.get_running_loop()
+    
+    # Start 3 workers
+    workers = [loop.create_task(worker(f"W{i}")) for i in range(3)]
+
+    # Start producer
+    await producer()
+
+    # Send stop signals
+    for _ in workers:
+        await task_queue.put(None)
+
+    # Wait for workers to exit
+    await asyncio.gather(*workers)
+
+asyncio.run(main())
+```
+
 ## Drawbacks of multiprocessing in Real-Time Systems
 ### 1. High Overhead in Spawning Processes
 Each process is heavy — OS allocates memory, separate interpreter, context switches.
