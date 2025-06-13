@@ -1,3 +1,40 @@
+## Drawbacks of multiprocessing in Real-Time Systems
+### 1. High Overhead in Spawning Processes
+Each process is heavy — OS allocates memory, separate interpreter, context switches.
+
+On Windows, multiprocessing spawns new processes using spawn, which is much slower than fork on Unix.
+
+### 2. Slow Inter-Process Communication (IPC)
+Sharing data between processes requires serialization (pickling).
+
+Large objects (e.g., NumPy arrays, ML models) can be expensive to transfer between processes.
+
+Example:
+
+```python
+# Sending a large dict between processes
+pipe.send(huge_dict)  # slow due to pickling
+```
+### 3. Debugging is Hard
+Stack traces can be misleading or silent.
+
+Errors inside child processes don’t always bubble up clearly to the main process.
+
+Logging from children often doesn’t show up as expected.
+
+### 4. Not Scalable Across Machines
+multiprocessing is bound to a single machine.
+
+If you want to scale across nodes, you’ll need something like:
+- Celery
+- Dask
+- Ray
+- Spark
+
+### 5. Not Ideal for Short Tasks
+Process startup/shutdown overhead can dominate performance if tasks are small.
+In such cases, a ThreadPoolExecutor or asyncio may be more efficient.
+
 ## How does the Global Interpreter Lock (GIL) affect multithreading in Python?
 - It's a mutex (mutual exclusion lock) that allows only one thread at a time to execute Python bytecode, even on multi-core CPUs.
 - It ensures memory safety of Python objects, especially since CPython's memory management (e.g., reference counting) is not thread-safe.
