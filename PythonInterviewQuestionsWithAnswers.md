@@ -1,3 +1,125 @@
+## How does Python's memory model work for immutable types like strings and integers?
+Great question — understanding how Python handles immutable types like strings and integers is key to writing efficient and bug-free code.
+
+### 🔒 What is an immutable type?
+An immutable object cannot be changed after it's created.
+
+Examples:
+int, float, str, tuple, frozenset
+
+### 1. Object Identity and Interning
+Python often reuses immutable objects to save memory and improve performance. This is done via interning.
+
+#### 🔢 Small Integer Caching (Integer Interning)
+Python pre-allocates small integers in the range [-5, 256] during startup. These are reused everywhere in the program.
+
+```python
+a = 100
+b = 100
+print(a is b)  # ✅ True — same object (interned)
+
+a = 300
+b = 300
+print(a is b)  # ❌ False — not interned
+```
+
+Why [-5, 256]? These are commonly used values, so caching them saves memory and boosts performance.
+
+#### 🧵 String Interning
+Python automatically interns some strings:
+
+Short strings
+
+Strings that look like identifiers (e.g., 'foo', 'x123')
+
+Compile-time constants
+
+```python
+s1 = "hello"
+s2 = "hello"
+print(s1 is s2)  # ✅ Often True (interned)
+
+s3 = "hello world"
+s4 = "hello world"
+print(s3 is s4)  # ❌ Often False (not auto-interned)
+```
+
+To explicitly intern a string:
+
+```python
+import sys
+s1 = sys.intern("hello world")
+s2 = sys.intern("hello world")
+print(s1 is s2)  # ✅ True
+```
+
+#### 2. Reassignment Creates New Objects
+Immutable means no in-place mutation. Any operation that modifies the value creates a new object.
+
+```python
+x = 10
+print(id(x))   # e.g., 140394400855184
+
+x += 1
+print(id(x))   # Different ID — new object!
+
+s = "hello"
+print(id(s))
+
+s += " world"
+print(id(s))  # New object created
+```
+
+## What is the difference between is and ==? Where might using is cause a bug? 
+
+### ✅ == (Equality)
+Compares values of two objects.
+
+- Returns True if the contents are the same.
+- Calls the __eq__() method under the hood.
+
+### ✅ is (Identity)
+- Compares object identity
+- Returns True only if both variables point to the exact same object in memory (i.e., same id()).
+
+```python
+a = [1, 2, 3]
+b = [1, 2, 3]
+
+print(a == b)  # True — same contents
+print(a is b)  # False — different objects in memory
+
+c = a
+print(a is c)  # True — both refer to the same object
+```
+
+### When is might cause bugs
+
+#### 1. With small integers or strings (due to interning):
+Python caches small integers [-5, 256] and some short strings for performance, so they might seem like the same object:
+
+```python
+x = 256
+y = 256
+print(x is y)  # True
+
+x = 257
+y = 257
+print(x is y)  # False — this may surprise you!
+```
+
+```python
+a = "hello"
+b = "hello"
+print(a is b)  # True — often, due to interning
+
+a = "".join(["he", "llo"])
+print(a == b)  # True
+print(a is b)  # False — different objects
+```
+
+👉 So using is to compare strings or numbers can lead to subtle bugs.
+
 ## Find the output
 <details>
 
