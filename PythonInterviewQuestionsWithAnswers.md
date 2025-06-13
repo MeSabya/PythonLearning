@@ -1,3 +1,144 @@
+## How does the Global Interpreter Lock (GIL) affect multithreading in Python?
+- It's a mutex (mutual exclusion lock) that allows only one thread at a time to execute Python bytecode, even on multi-core CPUs.
+- It ensures memory safety of Python objects, especially since CPython's memory management (e.g., reference counting) is not thread-safe.
+
+![image](https://github.com/user-attachments/assets/8d6be67b-55f0-415a-a193-998164b8f4b5)
+
+![image](https://github.com/user-attachments/assets/93adfd3b-1897-4f51-9b7d-f9136bdcc61b)
+
+![image](https://github.com/user-attachments/assets/71a7c33f-3865-4885-886d-05fd2c82cfc8)
+
+
+## Implement a producer-consumer queue using asyncio.Queue.
+
+```python
+import asyncio
+import random
+
+# Sentinel to signal shutdown
+SENTINEL = None
+
+async def producer(queue: asyncio.Queue, n_items: int):
+    for i in range(n_items):
+        item = f"item-{i}"
+        print(f"[Producer] Produced: {item}")
+        await queue.put(item)
+        await asyncio.sleep(random.uniform(0.1, 0.5))  # Simulate work
+    # Send sentinel values to shut down consumers
+    for _ in range(NUM_CONSUMERS):
+        await queue.put(SENTINEL)
+
+async def consumer(queue: asyncio.Queue, name: str):
+    while True:
+        item = await queue.get()
+        if item is SENTINEL:
+            print(f"[{name}] Received sentinel. Exiting.")
+            break
+        print(f"[{name}] Consumed: {item}")
+        await asyncio.sleep(random.uniform(0.2, 0.6))  # Simulate work
+
+async def main():
+    queue = asyncio.Queue()
+    n_items = 10
+    global NUM_CONSUMERS
+    NUM_CONSUMERS = 3
+
+    # Start producer
+    prod_task = asyncio.create_task(producer(queue, n_items))
+
+    # Start multiple consumers
+    cons_tasks = [
+        asyncio.create_task(consumer(queue, f"Consumer-{i}"))
+        for i in range(NUM_CONSUMERS)
+    ]
+
+    # Wait for all tasks to finish
+    await prod_task
+    await asyncio.gather(*cons_tasks)
+
+# Run the asyncio event loop
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## What Is the Event Loop?
+An event loop:
+
+- Waits for events (like socket read/write readiness, timers, etc.).
+- Dispatches them to the appropriate coroutines or callbacks.
+- Continues running until all tasks are done.
+
+### 🔧 Typical Flow:
+```python
+import asyncio
+
+async def main():
+    print("Hello")
+    await asyncio.sleep(1)
+    print("World")
+
+asyncio.run(main())
+```
+
+- main() is a coroutine.
+- asyncio.run() starts the event loop.
+- await asyncio.sleep(1) suspends the task so the loop can do other work.
+
+### 🧠 How It Works Internally:
+- You create coroutine objects using async def.
+- The event loop schedules them.
+- When a coroutine hits await, control is yielded back to the event loop.
+- The event loop switches to another ready task.
+- Once I/O completes or a timer fires, the coroutine is resumed.
+- This is cooperative multitasking — tasks must explicitly yield using await.
+
+### ✅ When asyncio Scales Well:
+Thousands of concurrent I/O-bound operations:
+
+- Web scraping
+- Web servers (e.g. FastAPI, aiohttp)
+- Chat servers
+- DB/network clients
+- File operations
+
+### ⚠️ When asyncio Fails to Scale:
+
+#### 1. CPU-bound Work
+```python
+async def compute():
+    # BAD: Will block the event loop!
+    for _ in range(10**8):
+        pass
+```
+
+No await, no yielding — blocks the loop.
+
+
+## What happens under the hood when you call a function?
+Function Call = Object + __call__
+Under the hood, function call is just syntactic sugar:
+
+```python
+add(2, 3)
+```
+
+is equivalent to:
+
+```python
+add.__call__(2, 3)
+```
+So any object with a __call__ method is callable, like:
+
+```python
+class Adder:
+    def __call__(self, a, b):
+        return a + b
+
+adder = Adder()
+print(adder(2, 3))  # Calls adder.__call__(2, 3)
+```
+
+
 ## How does Python's memory model work for immutable types like strings and integers?
 Great question — understanding how Python handles immutable types like strings and integers is key to writing efficient and bug-free code.
 
